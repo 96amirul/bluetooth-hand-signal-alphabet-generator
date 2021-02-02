@@ -1,0 +1,150 @@
+#include <SoftwareSerial.h>
+SoftwareSerial Bluetooth(10, 9); // RX, 
+const int flexPin1 = A0;      // Pin connected to voltage divider output
+const int flexPin2 = A1;      // Pin connected to voltage divider output
+const int flexPin3 = A2;      // Pin connected to voltage divider output
+const int flexPin4 = A3;      // Pin connected to voltage divider output
+const int flexPin5 = A4;      // Pin connected to voltage divider output
+int Data;                     // the data received
+
+void setup() {
+  Bluetooth.begin(9600);
+  Serial.println("Waiting for command...");
+  Bluetooth.println("Angle Retracted from Flex sensor:");
+  Bluetooth.println("Send 1 to run. Send 0 to stop");
+  Serial.begin(9600);
+  pinMode(flexPin1, INPUT);
+  pinMode(flexPin2, INPUT);
+  pinMode(flexPin3, INPUT);
+  pinMode(flexPin4, INPUT);
+  pinMode(flexPin5, INPUT);
+}
+
+// Change these constants according to your project's design
+const float VCC = 5;      // voltage at Ardunio 5V line
+const float R_DIV = 6800.0;  // resistor used to create a voltage divider
+const float flatResistance = 25000.0; // resistance when flat
+const float bendResistance = 100000.0;  // resistance at 90 deg
+
+
+void collect() {
+  //1
+  // Read the ADC, and calculate voltage and resistance from it
+  int ADCflex1 = analogRead(flexPin1);
+  float Vflex1 = ADCflex1 * VCC / 1023.0;
+  float Rflex1 = R_DIV * (VCC / Vflex1 - 1.0);
+  Serial.println("Resistance1: " + String(Rflex1) + " ohms");
+  Bluetooth.println("Resistance1: " + String(Rflex1) + " ohms");
+  
+  // Use the calculated resistance to estimate the sensor's bend angle:
+  float angle1 = map(Rflex1, flatResistance, bendResistance, 0, 90.0);
+  Serial.println("Bend1: " + String(angle1) + " degrees");
+  Bluetooth.println("Bend1: " + String(angle1) + " degrees");
+
+  //2
+  // Read the ADC, and calculate voltage and resistance from it
+  int ADCflex2 = analogRead(flexPin2);
+  float Vflex2 = ADCflex2 * VCC / 1023.0;
+  float Rflex2 = R_DIV * (VCC / Vflex2 - 1.0);
+  Serial.println("Resistance2: " + String(Rflex2) + " ohms");
+  Bluetooth.println("Resistance2: " + String(Rflex2) + " ohms");
+  
+  // Use the calculated resistance to estimate the sensor's bend angle:
+  float angle2 = map(Rflex2, flatResistance, bendResistance, 0, 90.0);
+  Serial.println("Bend2: " + String(angle2) + " degrees");
+  Bluetooth.println("Bend2: " + String(angle2) + " degrees");
+
+  //3
+  // Read the ADC, and calculate voltage and resistance from it
+  int ADCflex3 = analogRead(flexPin3);
+  float Vflex3 = ADCflex3 * VCC / 1023.0;
+  float Rflex3 = R_DIV * (VCC / Vflex3 - 1.0);
+  Serial.println("Resistance3: " + String(Rflex3) + " ohms");
+  Bluetooth.println("Resistance3: " + String(Rflex3) + " ohms");
+  
+  // Use the calculated resistance to estimate the sensor's bend angle:
+  float angle3 = map(Rflex3, flatResistance, bendResistance, 0, 90.0);
+  Serial.println("Bend3: " + String(angle3) + " degrees");
+  Bluetooth.println("Bend3: " + String(angle3) + " degrees");
+
+  //4
+  // Read the ADC, and calculate voltage and resistance from it
+  int ADCflex4 = analogRead(flexPin4);
+  float Vflex4 = ADCflex4 * VCC / 1023.0;
+  float Rflex4 = R_DIV * (VCC / Vflex4 - 1.0);
+  Serial.println("Resistance4: " + String(Rflex4) + " ohms");
+  Bluetooth.println("Resistance4: " + String(Rflex4) + " ohms");
+  
+  // Use the calculated resistance to estimate the sensor's bend angle:
+  float angle4 = map(Rflex4, flatResistance, bendResistance, 0, 90.0);
+  Serial.println("Bend4: " + String(angle4) + " degrees");  
+  Bluetooth.println("Bend4: " + String(angle4) + " degrees");
+
+  //5
+  // Read the ADC, and calculate voltage and resistance from it
+  int ADCflex5 = analogRead(flexPin5);
+  float Vflex5 = ADCflex5 * VCC / 1023.0;
+  float Rflex5 = R_DIV * (VCC / Vflex5 - 1.0);
+  Serial.println("Resistance5: " + String(Rflex5) + " ohms");
+  Bluetooth.println("Resistance5: " + String(Rflex5) + " ohms");
+  
+  // Use the calculated resistance to estimate the sensor's bend angle:
+  float angle5 = map(Rflex5, flatResistance, bendResistance, 0, 90.0);
+  Serial.println("Bend5: " + String(angle5) + " degrees");
+  Bluetooth.println("Bend5: " + String(angle5) + " degrees");
+  Serial.println();  
+  Bluetooth.println();
+
+  
+  if(((Rflex1>=30846.67)&&(Rflex1<=31746.67))&&((Rflex2>=46974.80)&&(Rflex2<=48974.8))&&((Rflex3>=61075.25)&&(Rflex3<=63075.25))&&((Rflex4>=70361.80)&&(Rflex4<=72361.80))&&((Rflex5>=61075.25)&&(Rflex5<=63075.25)))
+  Serial.println("A");
+  Bluetooth.println("A");
+  else if(((Rflex1>=42976.64)&&(Rflex1<=44976.64))&&((Rflex2>=23117.33)&&(Rflex2<=25117.33))&&((Rflex3>=29006.35)&&(Rflex3<=31006.35))&&((Rflex4>=31725.00)&&(Rflex4<=33725.00))&&((Rflex5>=26467.98)&&(Rflex5<=28467.98)))
+  Serial.println("B");
+  Bluetooth.println("B");
+  else if(((Rflex1>=33607.14)&&(Rflex1<=35607.14))&&((Rflex2>=29600.00)&&(Rflex2<=31600.00))&&((Rflex3>=40846.16)&&(Rflex3<=42846.16))&&((Rflex4>=45710.77)&&(Rflex4<=47710.77))&&((Rflex5>=29400.00)&&(Rflex5<=31400.00)))
+  Serial.println("C");
+  Bluetooth.println("C");
+  else if(((Rflex1>=30846.67)&&(Rflex1<=32846.67))&&((Rflex2>=24555.35)&&(Rflex2<=26555.35))&&((Rflex3>=72158.62)&&(Rflex3<=74158.62))&&((Rflex4>=75014.29)&&(Rflex4<=77014.29))&&((Rflex5>=63915.46)&&(Rflex5<=65915.46)))
+  Serial.println("D");
+  Bluetooth.println("D");
+  else if(((Rflex1>=32410.41)&&(Rflex1<=34410.41))&&((Rflex2>=55440.00)&&(Rflex2<=57440.00))&&((Rflex3>=63183.68)&&(Rflex3<=65183.68))&&((Rflex4>=71250.00)&&(Rflex4<=73250.00))&&((Rflex5>=64662.50)&&(Rflex5<=66662.50)))
+  Serial.println("E");
+  Bluetooth.println("E");
+  else if(((Rflex1>=38887.25)&&(Rflex1<=40887.25))&&((Rflex2>=59088.46)&&(Rflex2<=61088.46))&&((Rflex3>=28243.52)&&(Rflex3<=30243.52))&&((Rflex4>=31280.90)&&(Rflex4<=33280.90))&&((Rflex5>=26637.62)&&(Rflex5<=28637.62)))
+  Serial.println("F");
+  Bluetooth.println("F");
+  else if(((Rflex1>=28812.63)&&(Rflex1<=30812.63))&&((Rflex2>=23964.38)&&(Rflex2<=25964.38))&&((Rflex3>=68643.95)&&(Rflex3<=70643.95))&&((Rflex4>=73088.38)&&(Rflex4<=75088.38))&&((Rflex5>=63915.46)&&(Rflex5<=65015.46)))
+  Serial.println("G");
+  Bluetooth.println("G");
+  else if(((Rflex1>=27511.68)&&(Rflex1<=29511.68))&&((Rflex2>=23394.62)&&(Rflex2<=25394.62))&&((Rflex3>=30421.98)&&(Rflex3<=32421.98))&&((Rflex4>=64662.50)&&(Rflex4<=66662.50))&&((Rflex5>=51152.54)&&(Rflex5<=53152.54)))
+  Serial.println("H");
+  Bluetooth.println("H");
+  else if(((Rflex1>=33362.13)&&(Rflex1<=35362.13))&&((Rflex2>=48756.09)&&(Rflex2<=50756.09))&&((Rflex3>=63915.46)&&(Rflex3<=65915.46))&&((Rflex4>=68643.95)&&(Rflex4<=70643.95))&&((Rflex5>=26133.66)&&(Rflex5<=28133.66)))
+  Serial.println("I");
+  Bluetooth.println("I");
+  
+  
+  delay(1000);
+}
+//void huruf(){
+  //collect();
+
+//}
+
+void loop(){
+  if (Bluetooth.available()){ //wait for data received
+    Data=Bluetooth.read();
+    if(Data=='1'){  
+      collect();
+      //huruf();
+      Serial.println("Next? Send 1 to continue. Send 0 to stop");
+      Bluetooth.println("Next?");
+    }
+    else if(Data=='0'){
+       Serial.println("Thank you!");
+       Bluetooth.println("Thank you!");
+    }
+    else{;}
+  }
+}
